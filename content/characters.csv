@@ -1,0 +1,6 @@
+character_id,dex_no,dex_no_status,name_zh,type_id,base_type_id,art_file,silhouette_file,description
+fm001,66,隨機暫定,‹待命名›,pied,,clean/fm001.png,silhouette/fm001.png,黑白花、淺藍衣服、坐姿
+fm002,43,隨機暫定,‹待命名›,special,black_mask,clean/fm002.png,silhouette/fm002.png,熱狗裝
+fm003,92,隨機暫定,‹待命名›,special,cream,clean/fm003.png,silhouette/fm003.png,花朵頭套、眨眼
+fm004,20,隨機暫定,‹待命名›,pied,,clean/fm004.png,silhouette/fm004.png,紅色螃蟹頭套
+fm005,54,隨機暫定,‹待命名›,cream,,clean/fm005.png,silhouette/fm005.png,南瓜

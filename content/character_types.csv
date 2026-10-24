@@ -1,0 +1,7 @@
+type_id,name_zh,is_special,main_colors,note
+cream,奶油法鬥,false,cream|white,
+pied,乳牛法鬥,false,white|black,黑白花
+blue,藍法鬥,false,blue,
+black_mask,黑嘴法鬥,false,amber|yellow|black,
+amber,琥珀法鬥,false,amber,
+special,特殊法鬥,true,,造型或主題角色；可另填 base_type_id 表示原本毛色
