@@ -1,0 +1,12 @@
+kind,element_id,quantity_or_weight,note
+guaranteed,potato,2,每天保證
+random_pool,butter,1,隨機池：每次抽 1 個，共抽 4 次，可重複，權重相同
+random_pool,pumpkin,1,
+random_pool,milk,1,
+random_pool,black_sesame,1,
+random_pool,blueberry,1,
+random_pool,strawberry,1,
+random_pool,lettuce,1,
+random_pool,peanut,1,
+random_pool,seaweed,1,
+random_pool,tomato,1,
