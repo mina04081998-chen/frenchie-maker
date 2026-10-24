@@ -9,7 +9,7 @@
 |---|---|---|---|
 | 遊戲主資料（公開） | `element_categories`、`elements`、`scenes`、`character_types`、`characters` | 所有人（只開放安全欄位） | 只有管理者（migration / 後台） |
 | 遊戲主資料（機密） | `recipes`、`fail_hints` | **前端不可讀**，只有 RPC | 只有管理者 |
-| 可調整設定 | `game_settings`、`starter_grant_items`、`daily_claim_items` | 公開設定可讀 | 只有管理者 |
+| 可調整設定 | `game_settings`、`starter_grant_items`、`daily_claim_items`、`daily_random_pool` | 公開設定可讀 | 只有管理者 |
 | 玩家資料 | `profiles`、`player_inventory`、`player_collection`、`player_discovered_recipes` | 本人 | `profiles` 部分欄位本人可改；其餘只能透過 RPC |
 | 紀錄 | `inventory_ledger`、`craft_logs`、`daily_claims` | 本人（唯讀） | 只能透過 RPC |
 
@@ -23,6 +23,7 @@ erDiagram
   character_types ||--o{ characters : "大分類"
   elements ||--o{ starter_grant_items : ""
   elements ||--o{ daily_claim_items : ""
+  elements ||--o{ daily_random_pool : ""
 
   profiles ||--o{ player_inventory : ""
   elements ||--o{ player_inventory : ""
@@ -123,19 +124,27 @@ erDiagram
 | 欄位 | 型別 | 說明 |
 |---|---|---|
 | `id` | `bool` PK DEFAULT true CHECK (`id`) | 強制只有一列 |
-| `daily_reset_timezone` | `text` NOT NULL | IANA 時區，例 `Asia/Taipei` ‹TBD D-05› |
-| `daily_reset_hour` | `smallint` NOT NULL CHECK `0..23` | ‹TBD D-05› |
+| `daily_reset_timezone` | `text` NOT NULL | `Asia/Taipei`（D-05） |
+| `daily_reset_hour` | `smallint` NOT NULL CHECK `0..23` | `5`（D-05） |
+| `daily_random_count` | `smallint` NOT NULL | 每日隨機抽取次數，`4`（D-04） |
 | `tutorial_recipe_id` | `text` FK → `recipes.id` | 新手教學配方（暫定 `r_fm005_a`）；只有教學流程會把這個配方告訴玩家 |
 | `overflow_policy` | `text` NOT NULL | 超過上限的處理方式 ‹TBD D-02› |
 | `max_inputs` | `smallint` NOT NULL | 單次投入上限（兩場景相同）‹TBD D-08› |
 | `updated_at` | `timestamptz` | |
 
-**`starter_grant_items`**、**`daily_claim_items`**（結構相同）
+**`starter_grant_items`**、**`daily_claim_items`**（結構相同；`daily_claim_items` 是每天保證發放的部分，例：馬鈴薯 2）
 
 | 欄位 | 型別 | 約束 |
 |---|---|---|
 | `element_id` | `text` | PK，FK → `elements.id` |
-| `quantity` | `int` | NOT NULL CHECK `> 0` ‹TBD D-03 / D-04› |
+| `quantity` | `int` | NOT NULL CHECK `> 0` |
+
+**`daily_random_pool`**（每日隨機池，D-04）
+
+| 欄位 | 型別 | 約束 |
+|---|---|---|
+| `element_id` | `text` | PK，FK → `elements.id` |
+| `weight` | `int` | NOT NULL CHECK `> 0`（目前全部為 1） |
 
 > 把數量放在資料表而不是程式碼裡，調整數值只需改資料，不需改前端或重新部署。
 
@@ -247,7 +256,7 @@ Supabase 有兩層權限：**GRANT 決定角色能否碰這張表，RLS 決定�
 | `characters` | SELECT（限 `id, dex_no, silhouette_path` 等安全欄位，以欄位 GRANT 限制） | 同左 | `is_released` |
 | `recipes`、`fail_hints` | ✗ | ✗ | 無 policy＝全拒 |
 | `game_settings` | SELECT 公開欄位 | SELECT 公開欄位 | — |
-| `starter_grant_items`、`daily_claim_items` | ✗ 或 SELECT（若要在畫面預告內容） | 同左 | — |
+| `starter_grant_items`、`daily_claim_items`、`daily_random_pool` | ✗（每日內容不預告） | ✗ | — |
 | `profiles` | ✗ | SELECT、UPDATE(`nickname`,`avatar_path`) | `user_id = auth.uid()` |
 | `player_inventory`、`player_collection`、`player_discovered_recipes` | ✗ | SELECT | `user_id = auth.uid()` |
 | `inventory_ledger`、`craft_logs`、`daily_claims` | ✗ | SELECT | `user_id = auth.uid()` |
