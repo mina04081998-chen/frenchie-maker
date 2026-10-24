@@ -14,9 +14,9 @@
 | `art/brand/logo.png` | 法鬥好朋友 Logo | |
 | `character_types.csv` | 角色大分類（奶油、乳牛、藍、黑嘴、琥珀、特殊…） | 已確認，可再增加 |
 | `characters.csv` | 角色清單；圖鑑編號目前為**隨機暫定** | 名稱待定 |
-| `element_categories.csv` | 元素分類＝顏色系，含代表色（Phase 1 用色塊當圖示） | **提案，待確認** |
-| `elements.csv` | 食物元素清單；`first_batch=true` 為第一批使用 | **提案，待確認** |
-| `recipes.csv` | 5 隻角色的配方（每個都含馬鈴薯、不綁場景） | **草案，待確認** |
+| `element_categories.csv` | 元素分類＝顏色系，含代表色（Phase 1 用色塊當圖示） | ✅ 已確認（D-28） |
+| `elements.csv` | 食物元素清單；`first_batch=true` 為第一批使用 | ✅ 已確認（D-28） |
+| `recipes.csv` | 5 隻角色的配方（每個都含馬鈴薯、不綁場景） | ✅ 已確認（D-29） |
 
 ## `art/clean/` 的處理內容
 
