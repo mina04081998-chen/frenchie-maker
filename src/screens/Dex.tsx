@@ -70,7 +70,7 @@ export function CharacterDetail({
         <BackButton onClick={onBack} />
         <h1>No.{formatDexNo(c.dexNo)}</h1>
       </div>
-      <div className={entry ? 'detail-art' : 'detail-art'} style={entry ? undefined : { background: 'var(--steel-wash)' }}>
+      <div className={entry ? 'detail-art' : 'detail-art'} style={entry ? undefined : { background: 'var(--mizu-wash)' }}>
         <img src={entry ? c.art : c.silhouette} alt={entry ? c.name : '未解鎖的剪影'} />
       </div>
       {entry ? (
@@ -125,14 +125,11 @@ async function drawCard(c: Character, nickname: string, avatar: string | null): 
   await document.fonts?.ready
   const [art, brand, face] = await Promise.all([loadImage(c.art), loadImage(logo), avatar ? loadImage(avatar) : Promise.resolve(null)])
 
-  const ink = '#2B2626'
-  const display = "'Huninn', 'Chiron GoRound TC', sans-serif"
-  const body = "'Chiron GoRound TC', sans-serif"
+  const ink = '#3E3A39'
+  const font = "'Huninn', 'PingFang TC', sans-serif"
 
-  ctx.fillStyle = '#FFF9F1'
+  ctx.fillStyle = '#FFFCF6'
   ctx.fillRect(0, 0, W, H)
-  ctx.fillStyle = '#EFE2D0'
-  for (let y = 18; y < H; y += 36) for (let x = 18; x < W; x += 36) ctx.fillRect(x, y, 3, 3)
 
   roundRect(ctx, 40, 40, W - 80, H - 80, 56)
   ctx.lineWidth = 10
@@ -140,7 +137,7 @@ async function drawCard(c: Character, nickname: string, avatar: string | null): 
   ctx.stroke()
 
   // 插畫底圓
-  ctx.fillStyle = '#FFE6CC'
+  ctx.fillStyle = '#FDF3D8'
   ctx.beginPath()
   ctx.arc(W / 2, 560, 380, 0, Math.PI * 2)
   ctx.fill()
@@ -148,9 +145,9 @@ async function drawCard(c: Character, nickname: string, avatar: string | null): 
 
   ctx.fillStyle = ink
   ctx.textAlign = 'center'
-  ctx.font = `600 40px ${body}`
+  ctx.font = `40px ${font}`
   ctx.fillText(`No.${formatDexNo(c.dexNo)}`, W / 2, 1010)
-  ctx.font = `92px ${display}`
+  ctx.font = `92px ${font}`
   ctx.fillText(c.name, W / 2, 1110)
 
   // 收藏者
@@ -158,7 +155,7 @@ async function drawCard(c: Character, nickname: string, avatar: string | null): 
   ctx.save()
   ctx.beginPath()
   ctx.arc(150, fy + 40, 52, 0, Math.PI * 2)
-  ctx.fillStyle = '#FFE6CC'
+  ctx.fillStyle = '#FDF3D8'
   ctx.fill()
   ctx.clip()
   if (face) ctx.drawImage(face, 98, fy - 12, 104, 104)
@@ -168,10 +165,10 @@ async function drawCard(c: Character, nickname: string, avatar: string | null): 
   ctx.lineWidth = 6
   ctx.stroke()
   ctx.textAlign = 'left'
-  ctx.font = `30px ${body}`
-  ctx.fillStyle = '#6E605A'
+  ctx.font = `30px ${font}`
+  ctx.fillStyle = '#7A7471'
   ctx.fillText('收藏者', 222, fy + 26)
-  ctx.font = `600 42px ${body}`
+  ctx.font = `42px ${font}`
   ctx.fillStyle = ink
   ctx.fillText(nickname, 222, fy + 76, 420)
 

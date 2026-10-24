@@ -63,7 +63,7 @@ export function AvatarPicker({ value, onChange }: { value: string | null; onChan
             移除
           </button>
         )}
-        {error && <span className="small" style={{ color: 'var(--berry)' }}>{error}</span>}
+        {error && <span className="small" style={{ color: 'var(--ink)' }}>{error}</span>}
       </div>
     </div>
   )
@@ -150,7 +150,7 @@ export function Me({
         登出
       </button>
 
-      <section className="card stack" style={{ background: 'var(--paper)' }}>
+      <section className="card stack" style={{ background: 'var(--washi)' }}>
         <h2 style={{ fontSize: 'var(--step-1)' }}>
           原型工具 <ProtoTag />
         </h2>
