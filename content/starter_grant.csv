@@ -1,9 +1,11 @@
-element_id,quantity
-potato,5
-butter,2
-pumpkin,2
-milk,4
-black_sesame,2
-blueberry,2
-strawberry,2
-lettuce,2
+element_id,quantity,note
+potato,5,草案：依新配方重算（原 21 個方案 B 的精神：夠做南瓜、藍衣乳牛、小花，並留少量容錯）
+butter,3,
+milk,2,
+black_sesame,2,
+heart_orange,1,
+heart_blue,1,
+heart_pink,1,
+pumpkin,1,
+shirt,1,
+flower,1,

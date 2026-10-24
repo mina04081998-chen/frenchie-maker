@@ -64,6 +64,8 @@ export interface GameApi {
   grantStarter(): Promise<{ player: Player; lines: GrantLine[] }>
   completeTutorial(): Promise<Player>
   craft(requestId: string, inputs: string[], scene: SceneId): Promise<CraftResult>
+  /** 目前鍋裡的內容「有機會」做出哪些角色：只回傳角色 ID，畫面只顯示剪影 */
+  previewCandidates(inputs: string[]): Promise<string[]>
   dailyStatus(): Promise<DailyStatus>
   claimDaily(): Promise<{ player: Player; lines: GrantLine[] }>
 }

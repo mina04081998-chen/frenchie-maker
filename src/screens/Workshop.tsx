@@ -1,11 +1,12 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ApiError, type CraftResult, type Inventory, type SceneId } from '../api/types'
 import { FoodIcon, Overlay, ProtoTag } from '../components/ui'
-import { Pot } from '../components/Pot'
 import { ACTIVE_ELEMENTS, CATEGORIES, formatDexNo, getCategory, getCharacter, getElement } from '../data/game'
 import { PROTO_MAX_INPUTS } from '../data/protoValues'
 import { TUTORIAL_STEPS } from '../data/tutorial'
 import { slotAccepts } from '../lib/recipe'
+import bowlScene from '../assets/scenes/dessert_bowl.webp'
+import cauldronScene from '../assets/scenes/cauldron.webp'
 
 type Mode = 'play' | 'tutorial' | 'trial'
 
@@ -13,15 +14,18 @@ interface Props {
   mode: Mode
   inventory: Inventory
   onCraft?: (requestId: string, inputs: string[], scene: SceneId) => Promise<CraftResult>
+  /** 依目前投入內容，取得「有機會做出」的角色（只顯示剪影） */
+  onPreview?: (inputs: string[]) => Promise<string[]>
   onOpenCharacter?: (id: string) => void
   onTutorialDone?: () => void
   onTrialSignUp?: () => void
   onExitTrial?: () => void
 }
 
-const SCENES: { id: SceneId; label: string }[] = [
-  { id: 'cauldron', label: '魔女魔法鍋' },
-  { id: 'dessert_bowl', label: '甜點鋼盆' },
+// 場景只影響外觀（D-07）
+const SCENES: { id: SceneId; label: string; image: string }[] = [
+  { id: 'dessert_bowl', label: '攪拌盆', image: bowlScene },
+  { id: 'cauldron', label: '魔法缸', image: cauldronScene },
 ]
 
 /** 依色系排列食材 */
@@ -34,14 +38,38 @@ const newRequestId = () =>
 
 type Outcome = { kind: 'craft'; result: CraftResult } | { kind: 'trial'; inputs: string[] }
 
-export function Workshop({ mode, inventory, onCraft, onOpenCharacter, onTutorialDone, onTrialSignUp, onExitTrial }: Props) {
-  const [scene, setScene] = useState<SceneId>('cauldron')
+export function Workshop({
+  mode,
+  inventory,
+  onCraft,
+  onPreview,
+  onOpenCharacter,
+  onTutorialDone,
+  onTrialSignUp,
+  onExitTrial,
+}: Props) {
+  const [scene, setScene] = useState<SceneId>('dessert_bowl')
   const [seq, setSeq] = useState<string[]>([])
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [outcome, setOutcome] = useState<Outcome | null>(null)
   // 同一次製造重試時沿用同一個 requestId（防重複扣料）
   const [pendingId, setPendingId] = useState<string | null>(null)
+  const [candidates, setCandidates] = useState<{ key: string; ids: string[] }>({ key: '', ids: [] })
+
+  // 有相關的圖鑑可以解鎖時，浮現剪影（試玩模式不連線，所以沒有）
+  const seqKey = seq.join(',')
+  useEffect(() => {
+    if (!onPreview || !seqKey) return
+    let alive = true
+    onPreview(seqKey.split(','))
+      .then((ids) => alive && setCandidates({ key: seqKey, ids }))
+      .catch(() => alive && setCandidates({ key: seqKey, ids: [] }))
+    return () => {
+      alive = false
+    }
+  }, [onPreview, seqKey])
+  const shownCandidates = seqKey && candidates.key === seqKey ? candidates.ids : []
 
   const maxInputs = mode === 'tutorial' ? TUTORIAL_STEPS.length : PROTO_MAX_INPUTS
   const tutorialStep = mode === 'tutorial' ? TUTORIAL_STEPS[seq.length] : undefined
@@ -143,36 +171,54 @@ export function Workshop({ mode, inventory, onCraft, onOpenCharacter, onTutorial
         ))}
       </div>
 
-      <div className={`stage ${scene}${busy ? ' stirring' : ''}`}>
-        <div className="pot-items" aria-label="已投入的食材">
-          {seq.map((id, i) => (
-            <FoodIcon key={`${id}-${i}`} id={id} small />
-          ))}
+      {/* 鍋子區固定在上方，往下選食材時仍看得到浮現的剪影 */}
+      <div className="bench">
+        <div className={`stage${busy ? ' stirring' : ''}`}>
+          <img className="stage-art" src={SCENES.find((s) => s.id === scene)!.image} alt={SCENES.find((s) => s.id === scene)!.label} />
+          {shownCandidates.length > 0 && (
+            <div className="ghost-row" aria-label={`有 ${shownCandidates.length} 隻法鬥可能會出現`}>
+              {shownCandidates.map((id) => {
+                const c = getCharacter(id)
+                return c ? <img key={id} className="ghost-sil" src={c.silhouette} alt="" /> : null
+              })}
+            </div>
+          )}
+          <div className="pot-items" aria-label="已投入的食材">
+            {seq.map((id, i) => (
+              <FoodIcon key={`${id}-${i}`} id={id} small />
+            ))}
+          </div>
         </div>
-        <Pot scene={scene} />
-      </div>
-
-      <div className="seq-bar">
-        <span className="seq-count">
-          已投入 {seq.length} / {maxInputs}
-          {seq.length > 0 && `：${seq.map((id) => getElement(id)?.name).join('→')}`}
-        </span>
-        <span className="spacer" />
-        <button type="button" className="btn small" onClick={undo} disabled={!seq.length || busy}>
-          收回
-        </button>
-        {mode !== 'tutorial' && (
-          <button type="button" className="btn small" onClick={clear} disabled={!seq.length || busy}>
-            清空
-          </button>
+        {mode !== 'trial' && seq.length > 0 && (
+          <p className="small muted center" aria-live="polite">
+            {shownCandidates.length > 0
+              ? `鍋子裡浮現了 ${shownCandidates.length} 個身影……繼續加料試試看！`
+              : '鍋子裡沒有浮現任何身影，這樣的組合好像做不出法鬥。'}
+          </p>
         )}
+
+        <div className="seq-bar">
+          <span className="seq-count">
+            已投入 {seq.length} / {maxInputs}
+            {seq.length > 0 && `：${seq.map((id) => getElement(id)?.name).join('、')}`}
+          </span>
+          <span className="spacer" />
+          <button type="button" className="btn small" onClick={undo} disabled={!seq.length || busy}>
+            收回
+          </button>
+          {mode !== 'tutorial' && (
+            <button type="button" className="btn small" onClick={clear} disabled={!seq.length || busy}>
+              清空
+            </button>
+          )}
+        </div>
+
+        {error && <div className="error">{error}</div>}
+
+        <button type="button" className="btn primary block" onClick={craft} disabled={!craftReady}>
+          {busy ? '攪拌中…' : '開始製造'}
+        </button>
       </div>
-
-      {error && <div className="error">{error}</div>}
-
-      <button type="button" className="btn primary block" onClick={craft} disabled={!craftReady}>
-        {busy ? '攪拌中…' : '開始製造'}
-      </button>
 
       <section className="pantry" aria-label="食材">
         <p className="pantry-legend small muted">

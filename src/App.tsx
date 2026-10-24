@@ -138,6 +138,7 @@ export default function App() {
           <Workshop
             mode="tutorial"
             inventory={player.inventory}
+            onPreview={api.previewCandidates}
             onCraft={async (requestId, inputs, scene) => {
               const r = await api.craft(requestId, inputs, scene)
               setPlayer((p) => (p ? { ...p, inventory: r.inventory } : p))
@@ -170,6 +171,7 @@ export default function App() {
           <Workshop
             mode="play"
             inventory={player.inventory}
+            onPreview={api.previewCandidates}
             onCraft={async (requestId, inputs, scene) => {
               const r = await api.craft(requestId, inputs, scene)
               // 重新讀取玩家資料（收藏、庫存）

@@ -1,6 +1,6 @@
 recipe_id,character_id,steps,status,idea
-r_fm001_a,fm001,potato*1|milk*2|black_sesame*1|blueberry*1,確認,馬鈴薯＋白＋黑＝乳牛，藍莓＝淺藍衣服
-r_fm002_a,fm002,potato*1|peanut*2|seaweed*1|tomato*1|lettuce*1,確認,馬鈴薯＋琥珀黑嘴＋番茄醬＋生菜＝熱狗
-r_fm003_a,fm003,potato*1|milk*1|strawberry*2|lettuce*1,確認,馬鈴薯＋奶油白毛＋粉紅花＋綠葉
-r_fm004_a,fm004,potato*1|milk*2|black_sesame*1|tomato*2,確認,馬鈴薯＋白＋黑＝乳牛，番茄＝紅螃蟹
-r_fm005_a,fm005,potato*1|@cream*1|pumpkin*2,確認,馬鈴薯＋任一奶油色系＋南瓜；示範分類步驟
+r_fm001_b,fm001,potato*1|milk*1|black_sesame*1|heart_blue*1|shirt*1,草案,乳牛（牛奶＋黑芝麻）＋藍色＋衣服
+r_fm002_b,fm002,potato*1|peanut*1|seaweed*1|heart_yellow*1|hotdog*1,草案,黑嘴（花生＋海苔）＋芥末黃＋熱狗
+r_fm003_b,fm003,potato*1|butter*1|heart_pink*1|flower*1,草案,奶油＋粉紅＋花朵
+r_fm004_b,fm004,potato*1|milk*1|black_sesame*1|heart_red*1|crab*1,你提供,乳牛（牛奶＋芝麻）＋紅色愛心＋螃蟹
+r_fm005_b,fm005,potato*1|@cream*1|heart_orange*1|pumpkin*1,草案,奶油色系任一＋橘色＋南瓜（新手教學）

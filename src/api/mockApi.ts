@@ -4,7 +4,7 @@
 import { ACTIVE_ELEMENTS, getElement } from '../data/game'
 import { PROTO_FAIL_HINTS, PROTO_MAX_INPUTS, PROTO_MAX_STACK } from '../data/protoValues'
 import { gameDayOf, nextResetAt, shiftedNow } from '../lib/gameDay'
-import { matchesRecipe, parseSteps } from '../lib/recipe'
+import { couldBecome, matchesRecipe, parseSteps } from '../lib/recipe'
 import { readJson, removeKey, writeJson } from '../lib/storage'
 import {
   DAILY_GUARANTEED,
@@ -226,7 +226,7 @@ export const mockApi: GameApi & ProtoTools = {
     // 成功或失敗，投入的元素都會消耗
     for (const [id, n] of Object.entries(need)) p.inventory[id] -= n
 
-    // 場景只影響畫面，不參與比對（D-07）
+    // 場景只影響畫面，不參與比對（D-07）；配方不看順序
     const recipe = RECIPES.find((r) => matchesRecipe(parseSteps(r.steps), inputs))
     let result: CraftResult
     if (recipe) {
@@ -261,6 +261,13 @@ export const mockApi: GameApi & ProtoTools = {
     p.craftResults[requestId] = result
     save(db)
     return result
+  },
+
+  async previewCandidates(inputs) {
+    await wait(120)
+    requirePlayer(load())
+    const ids = RECIPES.filter((r) => couldBecome(parseSteps(r.steps), inputs)).map((r) => r.characterId)
+    return [...new Set(ids)]
   },
 
   async dailyStatus(): Promise<DailyStatus> {

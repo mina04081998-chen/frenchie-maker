@@ -22,6 +22,8 @@ export type CategoryId =
   | 'pink'
   | 'orange'
   | 'green'
+  | 'heart'
+  | 'theme'
 
 export interface ElementCategory {
   id: CategoryId
@@ -66,6 +68,9 @@ export const CATEGORIES: ElementCategory[] = [
   { id: 'pink', name: '紅粉色系', color: '#F2A7A5' },
   { id: 'orange', name: '橘色系', color: '#F2A65A' },
   { id: 'green', name: '綠色系', color: '#A8D08D' },
+  // 草案：配件顏色用的愛心、角色主題道具（2026-10-24 新增，待確認）
+  { id: 'heart', name: '愛心', color: '#FCE6E1' },
+  { id: 'theme', name: '主題道具', color: '#E6F3F9' },
 ]
 
 export const ELEMENTS: GameElement[] = [
@@ -84,16 +89,25 @@ export const ELEMENTS: GameElement[] = [
   { id: 'seaweed', name: '海苔', category: 'black', emoji: '🍙', firstBatch: true },
   { id: 'black_bean', name: '黑豆', category: 'black', emoji: '🫘', firstBatch: false },
   { id: 'blueberry', name: '藍莓', category: 'blue', emoji: '🫐', firstBatch: true },
-  { id: 'butterfly_pea', name: '蝶豆花', category: 'blue', emoji: '🌸', firstBatch: false },
+  { id: 'butterfly_pea', name: '蝶豆花', category: 'blue', emoji: '🪻', firstBatch: false },
   { id: 'strawberry', name: '草莓', category: 'pink', emoji: '🍓', firstBatch: true },
   { id: 'tomato', name: '番茄', category: 'pink', emoji: '🍅', firstBatch: true },
   { id: 'pumpkin', name: '南瓜', category: 'orange', emoji: '🎃', firstBatch: true },
   { id: 'carrot', name: '紅蘿蔔', category: 'orange', emoji: '🥕', firstBatch: false },
   { id: 'lettuce', name: '生菜', category: 'green', emoji: '🥬', firstBatch: true },
   { id: 'matcha', name: '抹茶', category: 'green', emoji: '🍵', firstBatch: false },
+  { id: 'heart_red', name: '紅色愛心', category: 'heart', emoji: '❤️', firstBatch: true },
+  { id: 'heart_blue', name: '藍色愛心', category: 'heart', emoji: '💙', firstBatch: true },
+  { id: 'heart_yellow', name: '黃色愛心', category: 'heart', emoji: '💛', firstBatch: true },
+  { id: 'heart_pink', name: '粉紅愛心', category: 'heart', emoji: '🩷', firstBatch: true },
+  { id: 'heart_orange', name: '橘色愛心', category: 'heart', emoji: '🧡', firstBatch: true },
+  { id: 'crab', name: '螃蟹', category: 'theme', emoji: '🦀', firstBatch: true },
+  { id: 'shirt', name: '小衣服', category: 'theme', emoji: '👕', firstBatch: true },
+  { id: 'hotdog', name: '熱狗', category: 'theme', emoji: '🌭', firstBatch: true },
+  { id: 'flower', name: '花朵', category: 'theme', emoji: '🌸', firstBatch: true },
 ]
 
-/** 第一批開放的 11 種元素 */
+/** 第一批開放的元素（11 種食材＋草案中的愛心與主題道具） */
 export const ACTIVE_ELEMENTS = ELEMENTS.filter((e) => e.firstBatch)
 
 export const CHARACTER_TYPES: CharacterType[] = [

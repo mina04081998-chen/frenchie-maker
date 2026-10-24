@@ -12,11 +12,13 @@
 | `art/clean/` | 匯入用版本：移除文字（D-25）與零星雜點 | 由程式產生 |
 | `art/silhouette/` | 剪影，由 `clean/` 的透明通道自動產生（D-22 建議方案） | 由程式產生 |
 | `art/brand/logo.png` | 法鬥好朋友 Logo | |
+| `art/scenes/` | 製造場景插畫：`mixing_bowl.jpg`（攪拌盆）、`magic_cauldron.jpg`（魔法缸） | 你提供 |
+| `starter_grant.csv`、`daily_claim.csv` | 初始元素、每日補給 | **依新配方重算的草案（D-38）** |
 | `character_types.csv` | 角色大分類（奶油、乳牛、藍、黑嘴、琥珀、特殊…） | 已確認，可再增加 |
 | `characters.csv` | 角色清單；圖鑑編號目前為**隨機暫定** | 名稱待定 |
 | `element_categories.csv` | 元素分類＝顏色系，含代表色（Phase 1 用色塊當圖示） | ✅ 已確認（D-28） |
-| `elements.csv` | 食物元素清單；`first_batch=true` 為第一批使用 | ✅ 已確認（D-28） |
-| `recipes.csv` | 5 隻角色的配方（每個都含馬鈴薯、不綁場景） | ✅ 已確認（D-29） |
+| `elements.csv` | 元素清單；`first_batch=true` 為第一批使用 | 食材 ✅（D-28）；愛心與主題道具為草案（D-34） |
+| `recipes.csv` | 5 隻角色的配方（不看順序：毛色食材＋顏色愛心＋主題道具） | **草案（D-34）** |
 
 ## `art/clean/` 的處理內容
 
@@ -32,7 +34,7 @@
 
 ## 配方 `steps` 寫法
 
-- `元素ID*數量`，步驟之間用 `|` 分隔，順序即投入順序。
+- `元素ID*數量`，項目之間用 `|` 分隔。**不看順序**。
 - `@分類ID*數量` 表示「該分類的任意元素」，同一步內可混用（D-27）。
   例：`@cream*2` → 投「馬鈴薯＋奶油」、「奶油＋奶油」都算對。
 - 每個配方至少要有一步 `potato*N`（馬鈴薯規則）。
