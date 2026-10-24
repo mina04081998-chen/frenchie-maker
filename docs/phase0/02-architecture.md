@@ -86,7 +86,7 @@ sequenceDiagram
   participant DB as craft() RPC
   P->>UI: 依序投入元素，按「製造」
   UI->>UI: 產生 request_id，鎖定按鈕
-  UI->>DB: craft(request_id, scene, 投入序列)
+  UI->>DB: craft(request_id, 投入序列, 場景僅供紀錄)
   DB->>DB: 若 request_id 已處理過 → 直接回傳上次結果
   DB->>DB: 鎖定該玩家庫存列，檢查數量足夠
   alt 數量不足
@@ -170,7 +170,7 @@ flowchart TD
 |---|---|
 | `auth` | 登入狀態、註冊、登入、登出、密碼重設 |
 | `progress` | 讀寫雲端進度（只有登入玩家有進度） |
-| `workshop` | 兩種場景畫面、投入序列編輯、送出製造 |
+| `workshop` | 兩種場景畫面（可隨時切換，純外觀）、投入序列編輯、送出製造 |
 | `dex` | 圖鑑清單、剪影／正式圖切換、簽名網址快取 |
 | `daily` | 每日領取狀態與領取 |
 | `trial` | 訪客試玩：練習元素、投料動畫，不連線、不保存 |

@@ -19,7 +19,6 @@
 erDiagram
   auth_users ||--|| profiles : "1:1"
   element_categories ||--o{ elements : "分類"
-  scenes ||--o{ recipes : "場景"
   characters ||--o{ recipes : "產出"
   character_types ||--o{ characters : "大分類"
   elements ||--o{ starter_grant_items : ""
@@ -69,7 +68,9 @@ erDiagram
 |---|---|---|---|
 | `id` | `text` | PK | `cauldron`（魔女魔法鍋）、`dessert_bowl`（甜點鋼盆） |
 | `name_zh` | `text` | NOT NULL | |
-| `max_inputs` | `int` | NOT NULL CHECK `> 0` | 單次投入上限 ‹TBD D-08› |
+| `sort_order` | `int` | NOT NULL DEFAULT 0 | |
+
+場景**只影響畫面外觀**（D-07），不參與配方比對、扣料或任何結果。
 
 **`character_types`**（角色大分類）
 
@@ -100,14 +101,13 @@ erDiagram
 |---|---|---|---|
 | `id` | `text` | PK | 例：`r_fm001_a` |
 | `character_id` | `text` | FK → `characters.id`，NOT NULL | |
-| `scene_id` | `text` | FK → `scenes.id`，NULL 表示不限場景 ‹TBD D-07› | |
 | `steps` | `jsonb` | NOT NULL | 格式見 [04](04-data-formats.md) |
-| `match_key` | `text` | NOT NULL | 由 `steps` 計算出的標準化字串，用於快速比對 |
+| `match_key` | `text` | NOT NULL | 由 `steps` 展開的格位字串，例 `potato\|@cream\|pumpkin\|pumpkin` |
 | `version` | `int` | NOT NULL DEFAULT 1 | 配方調整時遞增 |
 | `is_active` | `bool` | NOT NULL DEFAULT true | |
-| — | — | UNIQUE (`scene_id`, `match_key`) WHERE `is_active` | 同場景不能有兩個相同配方 |
-
-一個角色可否有多個配方 ‹TBD D-07›；資料結構兩種都支援。
+| — | — | UNIQUE (`match_key`) WHERE `is_active` | 不能有兩個相同配方 |
+| — | — | UNIQUE (`character_id`) WHERE `is_active` | 每隻角色一個配方（D-07） |
+| — | — | CHECK：`steps` 至少一步為 `{"element":"potato"}` | 馬鈴薯規則（實作為函式檢查） |
 
 **`fail_hints`（機密）**
 
@@ -126,6 +126,7 @@ erDiagram
 | `daily_reset_timezone` | `text` NOT NULL | IANA 時區，例 `Asia/Taipei` ‹TBD D-05› |
 | `daily_reset_hour` | `smallint` NOT NULL CHECK `0..23` | ‹TBD D-05› |
 | `overflow_policy` | `text` NOT NULL | 超過上限的處理方式 ‹TBD D-02› |
+| `max_inputs` | `smallint` NOT NULL | 單次投入上限（兩場景相同）‹TBD D-08› |
 | `updated_at` | `timestamptz` | |
 
 **`starter_grant_items`**、**`daily_claim_items`**（結構相同）
@@ -195,7 +196,7 @@ erDiagram
 | `id` | `bigint` identity | PK |
 | `user_id` | `uuid` | FK |
 | `request_id` | `uuid` | **UNIQUE (`user_id`, `request_id`)** → 防重複提交 |
-| `scene_id` | `text` | FK |
+| `scene_id` | `text` | FK，僅記錄玩家當時使用的場景（統計用，不影響結果） |
 | `inputs` | `jsonb` | 玩家投入的原始序列 |
 | `success` | `bool` | |
 | `character_id` | `text` | NULL（失敗時） |
@@ -222,7 +223,7 @@ erDiagram
 | `ensure_profile(nickname)` | | 首次登入建立 profile |
 | `grant_starter()` | | `starter_granted_at` 為空才發放，發放後設為 now()；同交易 |
 | `claim_daily()` | | 計算遊戲日 → `INSERT ... ON CONFLICT DO NOTHING` 進 `daily_claims`；沒插入成功代表已領過 |
-| `craft(request_id, scene_id, inputs)` | | 見 02 的時序圖；`SELECT ... FOR UPDATE` 鎖庫存 |
+| `craft(request_id, inputs, scene_id)` | | 見 02 的時序圖；`SELECT ... FOR UPDATE` 鎖庫存 |
 | `get_dex()` | | 回傳圖鑑清單；未解鎖角色依 D-10 隱藏名稱 |
 
 ## 5. 權限設計（GRANT + RLS）
