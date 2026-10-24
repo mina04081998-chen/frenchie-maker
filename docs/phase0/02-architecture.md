@@ -142,7 +142,7 @@ flowchart TD
 
   FIRST -- 是 --> PROFILE_SETUP[設定暱稱、頭像] --> STARTER[領取初始元素]
   FIRST -- 否 --> HOME
-  STARTER --> HOME
+  STARTER --> TUTORIAL[新手教學<br/>一步步教南瓜配方] --> NEWCHAR
 
   HOME[首頁 / 製造所大廳]
   HOME --> CAULDRON[魔女魔法鍋]

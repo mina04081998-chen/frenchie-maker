@@ -125,6 +125,7 @@ erDiagram
 | `id` | `bool` PK DEFAULT true CHECK (`id`) | 強制只有一列 |
 | `daily_reset_timezone` | `text` NOT NULL | IANA 時區，例 `Asia/Taipei` ‹TBD D-05› |
 | `daily_reset_hour` | `smallint` NOT NULL CHECK `0..23` | ‹TBD D-05› |
+| `tutorial_recipe_id` | `text` FK → `recipes.id` | 新手教學配方（暫定 `r_fm005_a`）；只有教學流程會把這個配方告訴玩家 |
 | `overflow_policy` | `text` NOT NULL | 超過上限的處理方式 ‹TBD D-02› |
 | `max_inputs` | `smallint` NOT NULL | 單次投入上限（兩場景相同）‹TBD D-08› |
 | `updated_at` | `timestamptz` | |
@@ -148,6 +149,7 @@ erDiagram
 | `nickname` | `text` | NOT NULL，CHECK 長度 1～‹TBD› | |
 | `avatar_path` | `text` | NULL | `avatars/{user_id}/...` |
 | `starter_granted_at` | `timestamptz` | NULL | 非空代表已領過初始元素（防重複） |
+| `tutorial_done_at` | `timestamptz` | NULL | 非空代表已完成新手教學 |
 | `created_at`、`updated_at` | `timestamptz` | | |
 
 **`player_inventory`**
