@@ -1,7 +1,10 @@
 // ⚠️ 原型專用：模擬「只存在伺服器」的資料。
 // Phase 2 起這些內容只放在資料庫（recipes、starter_grant_items、daily_*），前端不會再有這個檔案。
 // 內容與 content/recipes.csv、starter_grant.csv、daily_claim.csv 相同。
-// 配方不看順序：毛色食材 ＋ 代表配件顏色的愛心 ＋ 主題道具（草案，待確認）。
+// 配方不看順序、數量要相同：毛色食材 ＋ 代表顏色的愛心 ＋ 主題道具（D-34～D-36）。
+
+/** 剪影提示同時最多回傳幾隻（D-37） */
+export const PREVIEW_MAX = 10
 
 export const RECIPES: { id: string; characterId: string; steps: string }[] = [
   { id: 'r_fm001_b', characterId: 'fm001', steps: 'potato*1|milk*1|black_sesame*1|heart_blue*1|shirt*1' },

@@ -10,6 +10,7 @@ import {
   DAILY_GUARANTEED,
   DAILY_RANDOM_COUNT,
   DAILY_RANDOM_POOL,
+  PREVIEW_MAX,
   RECIPES,
   STARTER_GRANT,
 } from './mockServerData'
@@ -267,7 +268,8 @@ export const mockApi: GameApi & ProtoTools = {
     await wait(120)
     requirePlayer(load())
     const ids = RECIPES.filter((r) => couldBecome(parseSteps(r.steps), inputs)).map((r) => r.characterId)
-    return [...new Set(ids)]
+    // 已收集的角色也會浮現（D-37）；最多 10 隻
+    return [...new Set(ids)].slice(0, PREVIEW_MAX)
   },
 
   async dailyStatus(): Promise<DailyStatus> {

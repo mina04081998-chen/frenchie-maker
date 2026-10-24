@@ -68,7 +68,7 @@ export const CATEGORIES: ElementCategory[] = [
   { id: 'pink', name: '紅粉色系', color: '#F2A7A5' },
   { id: 'orange', name: '橘色系', color: '#F2A65A' },
   { id: 'green', name: '綠色系', color: '#A8D08D' },
-  // 草案：配件顏色用的愛心、角色主題道具（2026-10-24 新增，待確認）
+  // 愛心代表顏色（D-35）、主題道具代表角色造型（D-34）
   { id: 'heart', name: '愛心', color: '#FCE6E1' },
   { id: 'theme', name: '主題道具', color: '#E6F3F9' },
 ]
@@ -107,7 +107,7 @@ export const ELEMENTS: GameElement[] = [
   { id: 'flower', name: '花朵', category: 'theme', emoji: '🌸', firstBatch: true },
 ]
 
-/** 第一批開放的元素（11 種食材＋草案中的愛心與主題道具） */
+/** 第一批開放的元素：11 種食材＋5 色愛心＋4 種主題道具 */
 export const ACTIVE_ELEMENTS = ELEMENTS.filter((e) => e.firstBatch)
 
 export const CHARACTER_TYPES: CharacterType[] = [

@@ -537,6 +537,15 @@ img {
   pointer-events: none;
 }
 
+.ghost-row.many {
+  flex-wrap: wrap;
+  padding-inline: 12%;
+}
+
+.ghost-row.many .ghost-sil {
+  width: 13%;
+}
+
 .ghost-sil {
   width: 18%;
   max-width: 76px;

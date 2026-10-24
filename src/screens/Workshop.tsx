@@ -181,7 +181,7 @@ export function Workshop({
           <img className="stage-art" src={SCENES.find((s) => s.id === scene)!.image} alt={SCENES.find((s) => s.id === scene)!.label} />
           <SceneFx scene={scene} busy={busy} dropId={drop.id} dropKey={drop.key} />
           {shownCandidates.length > 0 && (
-            <div className="ghost-row" aria-label={`有 ${shownCandidates.length} 隻法鬥可能會出現`}>
+            <div className={shownCandidates.length > 5 ? 'ghost-row many' : 'ghost-row'} aria-label={`有 ${shownCandidates.length} 隻法鬥可能會出現`}>
               {shownCandidates.map((id) => {
                 const c = getCharacter(id)
                 return c ? <img key={id} className="ghost-sil" src={c.silhouette} alt="" /> : null

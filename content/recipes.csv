@@ -1,6 +1,6 @@
 recipe_id,character_id,steps,status,idea
-r_fm001_b,fm001,potato*1|milk*1|black_sesame*1|heart_blue*1|shirt*1,草案,乳牛（牛奶＋黑芝麻）＋藍色＋衣服
-r_fm002_b,fm002,potato*1|peanut*1|seaweed*1|heart_yellow*1|hotdog*1,草案,黑嘴（花生＋海苔）＋芥末黃＋熱狗
-r_fm003_b,fm003,potato*1|butter*1|heart_pink*1|flower*1,草案,奶油＋粉紅＋花朵
-r_fm004_b,fm004,potato*1|milk*1|black_sesame*1|heart_red*1|crab*1,你提供,乳牛（牛奶＋芝麻）＋紅色愛心＋螃蟹
-r_fm005_b,fm005,potato*1|@cream*1|heart_orange*1|pumpkin*1,草案,奶油色系任一＋橘色＋南瓜（新手教學）
+r_fm001_b,fm001,potato*1|milk*1|black_sesame*1|heart_blue*1|shirt*1,確認,乳牛（牛奶＋黑芝麻）＋藍色＋衣服
+r_fm002_b,fm002,potato*1|peanut*1|seaweed*1|heart_yellow*1|hotdog*1,確認,黑嘴（花生＋海苔）＋芥末黃＋熱狗
+r_fm003_b,fm003,potato*1|butter*1|heart_pink*1|flower*1,確認,奶油＋粉紅＋花朵
+r_fm004_b,fm004,potato*1|milk*1|black_sesame*1|heart_red*1|crab*1,確認,乳牛（牛奶＋芝麻）＋紅色愛心＋螃蟹
+r_fm005_b,fm005,potato*1|@cream*1|heart_orange*1|pumpkin*1,確認,奶油色系任一＋橘色＋南瓜（新手教學）
