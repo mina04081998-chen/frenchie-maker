@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ApiError, type CraftResult, type Inventory, type SceneId } from '../api/types'
 import { FoodIcon, Overlay, ProtoTag } from '../components/ui'
+import { SceneFx } from '../components/SceneFx'
 import { ACTIVE_ELEMENTS, CATEGORIES, formatDexNo, getCategory, getCharacter, getElement } from '../data/game'
 import { PROTO_MAX_INPUTS } from '../data/protoValues'
 import { TUTORIAL_STEPS } from '../data/tutorial'
@@ -55,6 +56,8 @@ export function Workshop({
   const [outcome, setOutcome] = useState<Outcome | null>(null)
   // 同一次製造重試時沿用同一個 requestId（防重複扣料）
   const [pendingId, setPendingId] = useState<string | null>(null)
+  // 每放入一個元素就播放一次掉落動畫
+  const [drop, setDrop] = useState<{ id: string | null; key: number }>({ id: null, key: 0 })
   const [candidates, setCandidates] = useState<{ key: string; ids: string[] }>({ key: '', ids: [] })
 
   // 有相關的圖鑑可以解鎖時，浮現剪影（試玩模式不連線，所以沒有）
@@ -93,6 +96,7 @@ export function Workshop({
     setError(null)
     setPendingId(null)
     setSeq((s) => [...s, id])
+    setDrop((d) => ({ id, key: d.key + 1 }))
   }
 
   const undo = () => {
@@ -175,6 +179,7 @@ export function Workshop({
       <div className="bench">
         <div className={`stage${busy ? ' stirring' : ''}`}>
           <img className="stage-art" src={SCENES.find((s) => s.id === scene)!.image} alt={SCENES.find((s) => s.id === scene)!.label} />
+          <SceneFx scene={scene} busy={busy} dropId={drop.id} dropKey={drop.key} />
           {shownCandidates.length > 0 && (
             <div className="ghost-row" aria-label={`有 ${shownCandidates.length} 隻法鬥可能會出現`}>
               {shownCandidates.map((id) => {

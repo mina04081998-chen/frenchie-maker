@@ -1037,3 +1037,215 @@ b {
   border-radius: 6px;
   padding: 0 4px;
 }
+
+/* ---------- 場景動畫（攪拌盆、魔法缸） ---------- */
+.fx {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* 攪拌盆：盆口的旋轉漩渦（壓扁的圓，看起來像從斜上方看） */
+.fx-swirl {
+  position: absolute;
+  left: calc(var(--cx) - var(--mw) / 2);
+  top: calc(var(--rim) - 2.5%);
+  width: var(--mw);
+  aspect-ratio: 1;
+  transform: scaleY(0.32);
+  transform-origin: center top;
+}
+
+.fx-swirl span {
+  position: absolute;
+  inset: 8%;
+  border-radius: 50%;
+  border: 3px dashed var(--ink);
+  opacity: 0.6;
+  animation: spin 3.2s linear infinite;
+}
+
+.fx-swirl span + span {
+  inset: 26%;
+  border: 4px dotted var(--coral);
+  opacity: 1;
+  animation-duration: 2.2s;
+  animation-direction: reverse;
+}
+
+.fx-busy .fx-swirl span {
+  animation-duration: 0.6s;
+}
+
+/* 攪拌盆：往上飄的蒸氣 */
+.fx-steam {
+  position: absolute;
+  left: calc(var(--cx) - 2% + (var(--i) - 1) * 4%);
+  top: calc(var(--rim) - 10%);
+  width: 3%;
+  aspect-ratio: 1 / 2.4;
+  border: 3px solid var(--ink);
+  border-color: var(--ink) transparent transparent var(--ink);
+  border-radius: 50%;
+  animation: steam 3s ease-in infinite;
+  animation-delay: calc(var(--i) * 1s);
+  opacity: 0;
+}
+
+.fx-busy .fx-steam {
+  animation-duration: 1.2s;
+}
+
+@keyframes steam {
+  0% {
+    transform: translateY(0) rotate(-8deg) scale(0.7);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-160%) rotate(10deg) scale(1.15);
+    opacity: 0;
+  }
+}
+
+/* 魔法缸：缸口的光暈呼吸 */
+.fx-glow {
+  position: absolute;
+  left: calc(var(--cx) - var(--mw) * 0.6);
+  top: calc(var(--rim) - 9%);
+  width: calc(var(--mw) * 1.2);
+  height: 16%;
+  border-radius: 50%;
+  background: var(--coral-wash);
+  filter: blur(10px);
+  animation: glow-pulse 2.4s ease-in-out infinite;
+}
+
+.fx-busy .fx-glow {
+  animation-duration: 0.6s;
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.1);
+  }
+}
+
+/* 魔法缸：冒出的泡泡 */
+.fx-bubble {
+  position: absolute;
+  left: calc(var(--cx) + var(--bx));
+  top: calc(var(--rim) - 2%);
+  width: var(--bs);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--washi);
+  border: 2px solid var(--ink);
+  animation: cauldron-bubble 2.8s ease-in infinite;
+  opacity: 0;
+}
+
+.fx-busy .fx-bubble {
+  animation-duration: 1s;
+}
+
+@keyframes cauldron-bubble {
+  0% {
+    transform: translateY(0) scale(0.4);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(-420%) scale(1.1);
+    opacity: 0;
+  }
+}
+
+/* 兩個場景共用：閃爍的小星星 */
+.fx-sparkle {
+  position: absolute;
+  left: calc(var(--cx) + var(--sx));
+  top: calc(var(--rim) + var(--sy));
+  font-size: clamp(13px, 4.8vw, 22px);
+  color: var(--yamabuki);
+  text-shadow: -1px 0 var(--ink), 1px 0 var(--ink), 0 -1px var(--ink), 0 1px var(--ink);
+  animation: twinkle 3.5s ease-in-out infinite;
+  opacity: 0;
+}
+
+.fx-busy .fx-sparkle {
+  animation-duration: 1s;
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    transform: scale(0.4) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) rotate(45deg);
+    opacity: 1;
+  }
+}
+
+/* 放入食材：從上方掉進鍋口，然後泛起一圈漣漪 */
+.fx-drop {
+  position: absolute;
+  left: var(--cx);
+  top: calc(var(--rim) - 4%);
+  transform: translate(-50%, -50%);
+  animation: fall-in 0.55s cubic-bezier(0.5, 0, 0.9, 0.6) forwards;
+}
+
+@keyframes fall-in {
+  0% {
+    transform: translate(-50%, -260%) scale(1.1);
+    opacity: 1;
+  }
+  85% {
+    transform: translate(-50%, -40%) scale(0.75);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, 0) scale(0.3);
+    opacity: 0;
+  }
+}
+
+.fx-ring {
+  position: absolute;
+  left: calc(var(--cx) - var(--mw) / 2);
+  top: calc(var(--rim) - 4%);
+  width: var(--mw);
+  height: 8%;
+  border-radius: 50%;
+  border: 3px solid var(--ink);
+  opacity: 0;
+  animation: ring 0.7s ease-out 0.45s forwards;
+}
+
+@keyframes ring {
+  0% {
+    transform: scale(0.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.1);
+    opacity: 0;
+  }
+}
